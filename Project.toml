@@ -1,0 +1,11 @@
+name = "VkFFTCUDA"
+uuid = "fce8808e-e16a-45a8-8cbe-ffae295c7ea5"
+authors = ["Paul Virally"]
+version = "0.1.0"
+
+[deps]
+AbstractFFTs = "621f4979-c628-5d54-868e-fcf4e3e8185c"
+BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
+CUDA = "052768ef-5323-5732-b1bb-66c8b64840ba"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+StatProfilerHTML = "a8a75453-ed82-57c9-9e16-4cd1196ecbf5"
