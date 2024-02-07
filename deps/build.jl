@@ -1,10 +1,10 @@
 # Check if we have nvcc
 has_nvcc = false
 try
-    run(`nvcc --version`)
-    has_nvcc = true
+    run(`which nvcc`)
+    global has_nvcc = true
 catch
-    has_nvcc = false
+    global has_nvcc = false
 end
 
 if has_nvcc
