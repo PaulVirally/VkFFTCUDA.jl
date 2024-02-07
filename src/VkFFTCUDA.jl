@@ -439,7 +439,8 @@ function AbstractFFTs.plan_inv(plan::VkFFTPlan)
 end
 
 function LinearAlgebra.mul!(y::CuArray{T}, plan::VkFFTPlan, x::CuArray{T}) where T <: Union{ComplexF32, ComplexF64}
-    res = _fft(plan.app, x.storage.buffer.ptr, y.storage.buffer.ptr, plan.direction)
+    # res = _fft(plan.app, x.storage.buffer.ptr, y.storage.buffer.ptr, plan.direction)
+    res = _fft(plan.app, x.data.rc.obj.ptr, y.data.rc.obj.ptr, plan.direction)
     if res != 0
         err = _vkffterr2string(res)
         throw(ArgumentError("Fatal VkFFT error: $err (code: $res)"))
