@@ -9,7 +9,7 @@ import CUDA: CuPtr, CuArray
 const libvkfft = "/usr/local/lib/libVkFFTCUDA.so"
 
 try
-    const VKFFT_MAX_FFT_DIMENSIONS = @ccall libvkfft.max_fft_dimensions()::Culonglong # The maximum number of dimensions that VkFFT supports (set at compile time, currently 4)
+    global VKFFT_MAX_FFT_DIMENSIONS = @ccall libvkfft.max_fft_dimensions()::Culonglong # The maximum number of dimensions that VkFFT supports (set at compile time, currently 4)
 catch
     # We do not have VkFFT installed
 end
