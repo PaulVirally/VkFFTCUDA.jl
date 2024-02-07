@@ -1,5 +1,7 @@
 module VkFFTCUDA
 
+__precompile__(false)
+
 export VkFFTPlan
 
 using LinearAlgebra
