@@ -6,7 +6,7 @@ using LinearAlgebra
 using AbstractFFTs
 import CUDA: CuPtr, CuArray
 
-const libvkfft = "/home/paulv/VkFFTCUDALib/build/libVkFFTCUDA.so"
+const libvkfft = "/usr/local/lib/libVkFFTCUDA.so"
 const VKFFT_MAX_FFT_DIMENSIONS = @ccall libvkfft.max_fft_dimensions()::Culonglong
 
 function _vkffterr2string(err::UInt64)
