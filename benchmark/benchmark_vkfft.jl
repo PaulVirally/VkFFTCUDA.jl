@@ -8,10 +8,7 @@ suite = BenchmarkGroup()
 suite["oop_fft"] = BenchmarkGroup()
 suite["ip_fft"] = BenchmarkGroup()
 
-small = 2:2:100
-medium = 100:20:1000
-large = 1000:200:10000
-sizes = vcat(small, medium, large)
+sizes = 2:4096
 
 x = CUDA.rand(ComplexF32, maximum(sizes))
 for size in sizes
