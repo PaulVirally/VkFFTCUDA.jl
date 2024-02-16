@@ -8,7 +8,7 @@ using LinearAlgebra
 using AbstractFFTs
 import CUDA: CuPtr, CuArray
 
-const libvkfft = "/usr/local/lib/libVkFFTCUDA.so"
+include("libinterface.jl")
 
 try
     global VKFFT_MAX_FFT_DIMENSIONS = @ccall libvkfft.max_fft_dimensions()::Culonglong # The maximum number of dimensions that VkFFT supports (set at compile time, currently 4)
@@ -229,6 +229,23 @@ function Base.:*(plan::VkFFTPlan, x::CuArray{T}) where T <: Union{ComplexF32, Co
         y = similar(x)
         return mul!(y, plan, x)
     end
+end
+
+function Base.show(io::IO, plan::VkFFTPlan)
+    dim_sizes = zeros(Int, VKFFT_MAX_FFT_DIMENSIONS)
+    dim_sizes[1:num_buffer_dim] .= plan.dims
+    dims_to_omit = setdiff(1:num_buffer_dim, plan.region)
+    omit_dims = zeros(Int, VKFFT_MAX_FFT_DIMENSIONS)
+    omit_dims[dims_to_omit] .= 1
+    fft_dim = 3 - omit_dims[3] * (omit_dims[2] + 1) # This works for VKFFT_MAX_FFT_DIMENSIONS = 4
+
+	fft_dim_str = "$(fft_dim)D"
+	inplace_str = plan.is_inplace ? "in-place" : "out-of-place"
+	forward_str = plan.direction == Int32(-1) ? "forward" : "inverse"
+	array_size_str = "×".join(string.(dims))
+
+	# ex: 3D in-place complex forward VkFFT plan for x×y×z CuArray of ComplexF32
+	print(io, "$(fft_dim_str) $inplace_str complex $forward_str VkFFT plan for $(array_size_str) CuArray of $(eltype(plan))")
 end
 
 end # module
