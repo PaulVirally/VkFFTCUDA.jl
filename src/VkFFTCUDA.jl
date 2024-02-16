@@ -233,19 +233,20 @@ end
 
 function Base.show(io::IO, plan::VkFFTPlan)
     dim_sizes = zeros(Int, VKFFT_MAX_FFT_DIMENSIONS)
-    dim_sizes[1:num_buffer_dim] .= plan.dims
-    dims_to_omit = setdiff(1:num_buffer_dim, plan.region)
+    dim_sizes[1:length(plan.dims)] .= plan.dims
+    dims_to_omit = setdiff(1:length(plan.dims), plan.region)
     omit_dims = zeros(Int, VKFFT_MAX_FFT_DIMENSIONS)
     omit_dims[dims_to_omit] .= 1
     fft_dim = 3 - omit_dims[3] * (omit_dims[2] + 1) # This works for VKFFT_MAX_FFT_DIMENSIONS = 4
 
-	fft_dim_str = "$(fft_dim)D"
-	inplace_str = plan.is_inplace ? "in-place" : "out-of-place"
-	forward_str = plan.direction == Int32(-1) ? "forward" : "inverse"
-	array_size_str = "×".join(string.(dims))
+    fft_dim_str = "$(fft_dim)D"
+    inplace_str = plan.is_inplace ? "in-place" : "out-of-place"
+    forward_str = plan.direction == Int32(-1) ? "forward" : "inverse"
+    array_size_str = join(string.(plan.dims), "×")
+    dims_str = "dim" * (length(plan.region) > 1 ? "s " : " ") * string(plan.region)
 
-	# ex: 3D in-place complex forward VkFFT plan for x×y×z CuArray of ComplexF32
-	print(io, "$(fft_dim_str) $inplace_str complex $forward_str VkFFT plan for $(array_size_str) CuArray of $(eltype(plan))")
+    # ex: 3D in-place complex forward VkFFT plan for x×y×z CuArray of ComplexF32 on dims (1, 2)
+    print(io, "$(fft_dim_str) $inplace_str complex $forward_str VkFFT plan for $(array_size_str) CuArray of $(eltype(plan)) on $(dims_str)")
 end
 
 end # module
