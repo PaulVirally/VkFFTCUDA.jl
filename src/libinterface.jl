@@ -1,3 +1,5 @@
+const libvkfft = "/usr/local/lib/libVkFFTCUDA.so"
+
 """
     _vkffterr2string(err::UInt64)
 
