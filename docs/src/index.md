@@ -16,5 +16,6 @@ using CUDA, AbstractFFTs, VkFFTCUDA
 x = CuArray(ComplexF32.(collect(reshape(1:60, 3, 4, 5))))
 ifft(fft(x)) ≈ x # Should return true
 ```
+⚠️ It is very important that you load VkFFTCUDA **after** CUDA because VkFFTCUDA.jl overwrites some methods provided by CUDA.jl
 
 Since VkFFTCUDA implements the API provided by [AbstractFFTS.jl](https://github.com/JuliaMath/AbstractFFTs.jl), you should refer to [their documentation](https://juliamath.github.io/AbstractFFTs.jl/stable/) to learn about all the available functionality.
