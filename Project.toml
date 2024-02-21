@@ -1,7 +1,7 @@
 name = "VkFFTCUDA"
 uuid = "fce8808e-e16a-45a8-8cbe-ffae295c7ea5"
 authors = ["Paul Virally"]
-version = "0.2.0"
+version = "0.2.1"
 
 [deps]
 AbstractFFTs = "621f4979-c628-5d54-868e-fcf4e3e8185c"
