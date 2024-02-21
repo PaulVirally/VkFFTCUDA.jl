@@ -11,7 +11,7 @@ import CUDA: CuPtr, CuArray
 include("libinterface.jl")
 
 try
-    global VKFFT_MAX_FFT_DIMENSIONS = @ccall libvkfft.max_fft_dimensions()::Culonglong # The maximum number of dimensions that VkFFT supports (set at compile time, currently 4)
+    global VKFFT_MAX_FFT_DIMENSIONS = Int(@ccall libvkfft.max_fft_dimensions()::Culonglong) # The maximum number of dimensions that VkFFT supports (set at compile time, currently 10)
 catch
     # We do not have VkFFT installed
 end
@@ -86,7 +86,11 @@ function _make_plan(x::CuArray{T}, region, forward::Bool, inplace::Bool; coalesc
     omit_dims = zeros(Int, VKFFT_MAX_FFT_DIMENSIONS)
     omit_dims[dims_to_omit] .= 1
 
-    num_fft_dim = 3 - omit_dims[3] * (omit_dims[2] + 1) # This works for VKFFT_MAX_FFT_DIMENSIONS = 4
+    num_fft_dim = VKFFT_MAX_FFT_DIMENSIONS - 1 - omit_dims[3] * (omit_dims[2] + 1) # This works for VKFFT_MAX_FFT_DIMENSIONS = 4
+    if num_buffer_dim > 4
+	# FIXME: This will only work for 1D FFTs if ndims(x) > 4
+	num_fft_dim = maximum(region)
+    end
 
     num_batches = prod(size(x)[collect(dims_to_omit)])
 
